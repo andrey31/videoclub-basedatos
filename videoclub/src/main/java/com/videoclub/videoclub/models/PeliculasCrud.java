@@ -1,5 +1,7 @@
 package com.videoclub.videoclub.models;
 
+import com.videoclub.videoclub.models.entities.Genero;
+import com.videoclub.videoclub.models.entities.Lenguaje;
 import com.videoclub.videoclub.models.entities.Peliculas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,20 +17,23 @@ public class PeliculasCrud {
     public Integer DeletePeliculas(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
-        String query= "DELETE FROM peliculas WHERE id=?";
-        
-        PreparedStatement ps= connection.prepareStatement(query);
+        String query = "DELETE FROM peliculas WHERE id=?";
+
+        PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
-        int delete= ps.executeUpdate();
+        int delete = ps.executeUpdate();
         conexion.closeConnection();
         return delete;
-        
+
     }
-public Peliculas findByIdPeliculas(int id) throws SQLException {
+
+    public Peliculas findByIdPeliculas(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "SELECT * FROM peliculas WHERE id = ?";
+        String query = "SELECT p.id, p.titulo, p.descripcion, p.duracion, p.anio, l.lenguaje, g.genero "
+                + "FROM peliculas as p INNER JOIN lenguajes as l ON l.id = p.fk_lenguaje "
+                + "INNER JOIN generos as g ON g.id = p.fk_genero WHERE p.id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -36,12 +41,23 @@ public Peliculas findByIdPeliculas(int id) throws SQLException {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            Peliculas peliculas = new Peliculas(
-                    rs.getInt("id"),
-                    rs.getString("peliculas")
-            );
+            Peliculas pelicula = new Peliculas();
+            pelicula.setId(rs.getInt("id"));
+            pelicula.setTitulo(rs.getString("titulo"));
+            pelicula.setDescripcion(rs.getString("descripcion"));
+            pelicula.setDuracion(rs.getString("duracion"));
+            pelicula.setAnio(rs.getString("anio"));
+            
+            Lenguaje lenguaje = new Lenguaje();
+            lenguaje.setLenguaje(rs.getString("lenguaje"));
+            pelicula.setLenguaje(lenguaje);
+            
+            Genero genero = new Genero();
+            genero.setGenero(rs.getString("genero"));
+            pelicula.setGenero(genero);
+          
             conexion.closeConnection();
-            return peliculas;
+            return pelicula;
         }
         conexion.closeConnection();
         return null;
@@ -51,12 +67,16 @@ public Peliculas findByIdPeliculas(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "INSERT INTO pelicula (pelicula) VALUES (?)";
+        String query = "INSERT INTO pelicula (titulo, descripcion, duracion, anio, fk_lenguaje, fk_genero) VALUES (?, ?,?,?,?,?)";
 
         PreparedStatement ps = connection.prepareStatement(query);
 
-        ps.setString(1, pelicula.getPeliculas());
-
+        ps.setString(1, pelicula.getTitulo());
+        ps.setString(2, pelicula.getDescripcion());
+        ps.setString(3, pelicula.getDuracion());
+        ps.setString(4, pelicula.getAnio());
+        ps.setInt(5, pelicula.getLenguaje().getId());
+        ps.setInt(6, pelicula.getGenero().getId());
         int insert = ps.executeUpdate();
 
         conexion.closeConnection();
@@ -65,18 +85,32 @@ public Peliculas findByIdPeliculas(int id) throws SQLException {
 
     }
 
-    public List<Peliculas> findAllCajero() throws SQLException {
+    public List<Peliculas> findAllPelicula() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
-        String query = "SELECT * FROM peliculas";
+        String query = "SELECT p.id, p.titulo, p.descripcion, p.duracion, p.anio, l.lenguaje, g.genero " +
+                      "FROM peliculas as p INNER JOIN lenguajes as l ON l.id = p.fk_lenguaje " +
+                       "INNER JOIN generos as g ON g.id = p.fk_genero ORDER BY p.id";
         ResultSet rs = connection.prepareStatement(query).executeQuery();
         List<Peliculas> Peliculas = new ArrayList<>();
 
         while (rs.next()) {
-            Peliculas pelicula= new Peliculas(
-                    rs.getInt("id"),
-                    rs.getString("peliculas")
-            );
+            
+            Peliculas pelicula = new Peliculas();
+            pelicula.setId(rs.getInt("id"));
+            pelicula.setTitulo(rs.getString("titulo"));
+            pelicula.setDescripcion(rs.getString("descripcion"));
+            pelicula.setDuracion(rs.getString("duracion"));
+            pelicula.setAnio(rs.getString("anio"));
+            
+            Lenguaje lenguaje = new Lenguaje();
+            lenguaje.setLenguaje(rs.getString("lenguaje"));
+            pelicula.setLenguaje(lenguaje);
+            
+            Genero genero = new Genero();
+            genero.setGenero(rs.getString("genero"));
+            pelicula.setGenero(genero);       
+            
             Peliculas.add(pelicula);
         }
         conexion.closeConnection();
