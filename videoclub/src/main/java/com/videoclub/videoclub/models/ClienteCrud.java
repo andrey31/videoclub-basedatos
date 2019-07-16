@@ -46,7 +46,11 @@ public class ClienteCrud {
         if (rs.next()) {
             Cliente cliente = new Cliente(
                     rs.getInt("id"),
-                    rs.getString("cliente")
+                    rs.getString("cliente"),
+                    rs.getString("apellido1"),
+                    rs.getString("apellido2"),
+                    rs.getString("correo"),
+                    rs.getString("telefono")
             );
             conexion.closeConnection();
             return cliente;
@@ -85,7 +89,11 @@ public class ClienteCrud {
         while (rs.next()) {
             Cliente cliente = new Cliente(
                     rs.getInt("id"),
-                    rs.getString("cliente")
+                    rs.getString("cliente"),
+                    rs.getString("apellido1"),
+                    rs.getString("apellido2"),
+                    rs.getString("correo"),
+                    rs.getString("telefono")
             );
             clientes.add(cliente);
         }
