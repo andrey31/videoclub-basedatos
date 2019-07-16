@@ -38,7 +38,7 @@ public Distrito findByIdDistrito(int id) throws SQLException {
         if (rs.next()) {
             Distrito distrito = new Distrito(
                     rs.getInt("id"),
-                    rs.getString("Distrito")
+                    rs.getString("distrito")
             );
             conexion.closeConnection();
             return distrito;
@@ -65,7 +65,7 @@ public Distrito findByIdDistrito(int id) throws SQLException {
 
     }
 
-    public List<Distrito> findAllCajero() throws SQLException {
+    public List<Distrito> findAllDistrito() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
         String query = "SELECT * FROM distrito";

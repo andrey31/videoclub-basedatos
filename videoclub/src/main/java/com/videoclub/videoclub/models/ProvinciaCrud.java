@@ -65,7 +65,7 @@ public Provincia findByIdProvincia(int id) throws SQLException {
 
     }
 
-    public List<Provincia> findAllCajero() throws SQLException {
+    public List<Provincia> findAllProvincia() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
         String query = "SELECT * FROM provincia";
@@ -75,7 +75,7 @@ public Provincia findByIdProvincia(int id) throws SQLException {
         while (rs.next()) {
             Provincia provincia= new Provincia(
                     rs.getInt("id"),
-                    rs.getString("peliculas")
+                    rs.getString("provincia")
             );
             Provincia.add(provincia);
         }
