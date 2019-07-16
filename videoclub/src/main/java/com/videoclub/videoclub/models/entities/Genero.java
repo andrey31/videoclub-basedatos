@@ -33,4 +33,8 @@ public class Genero {
     public String getGenero() {
         return this.genero;
     }
+    
+    public void setGenero(String genero){
+        this.genero = genero;
+    }
 }

@@ -33,4 +33,7 @@ public class Lenguaje {
     public String getLenguaje() {
         return this.lenguaje;
     }
+    public void setLenguaje (String lenguaje) {
+        this.lenguaje = lenguaje;
+    }
 }
