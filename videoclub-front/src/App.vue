@@ -2,6 +2,8 @@
 <div id="app">
   <div id="nav">
     <router-link to="/">Inicio</router-link> |
+    <router-link to="/movies">Alquiler/Venta</router-link> |
+    <router-link to="/settings">Configuración</router-link> |
     <router-link to="/about">Acerca de</router-link>
   </div>
   <router-view/>
@@ -28,13 +30,22 @@
 }
 
 #nav a.router-link-exact-active {
-  color: #c82333;
+  /* color: #8aff58; */
+  /* color: #709dff; */
+  font-size: 20px;
+  color: #00ffd5;
 }
 #body{
-  height: 100vh;
-  background-image: url('./assets/background.jpg');
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover; /* Resize the background image to cover the entire container */
+  height: 100/;
+  /* height: 100vh; */
+  background: url('./assets/background.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+}
+.bg-ligth-custom{
+  background-color: #f8f9faf7
 }
 </style>
