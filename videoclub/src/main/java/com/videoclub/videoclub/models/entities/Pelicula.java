@@ -1,17 +1,18 @@
 package com.videoclub.videoclub.models.entities;
 
 
-public class Peliculas {
+public class Pelicula {
     
     private int id;
     private String titulo;
     private String descripcion;
     private String duracion;
     private String anio;
+    private String imgUrl;
     private Lenguaje lenguaje;
     private Genero genero;
 
-    public Peliculas(int id, String titulo, String descripcion, String duracion, String anio, Lenguaje lenguaje, Genero genero) {
+    public Pelicula(int id, String titulo, String descripcion, String duracion, String anio, String imgUrl, Lenguaje lenguaje, Genero genero) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -21,7 +22,7 @@ public class Peliculas {
         this.genero = genero;
     }
 
-    public Peliculas() {
+    public Pelicula() {
     }
 
     public int getId() {
@@ -62,6 +63,14 @@ public class Peliculas {
 
     public void setAnio(String anio) {
         this.anio = anio;
+    }
+
+    public String getImgUrl(){
+        return imgUrl;
+    }
+    
+    public void setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
     }
 
     public Lenguaje getLenguaje() {

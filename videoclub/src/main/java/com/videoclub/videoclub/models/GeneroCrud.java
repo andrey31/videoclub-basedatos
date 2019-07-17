@@ -20,22 +20,28 @@ import java.util.List;
 public class GeneroCrud {
 
     private Conexion conexion = new Conexion();
+    private PeliculaCrud peliculaCrud = new PeliculaCrud();
 
     /* Elimina un genero por id */
     public Integer deleteGenero(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "DELETE FROM generos WHERE id = ?";
+        int peliculaContainGenero = peliculaCrud.findCountPeliculaByIdGenero(id);
 
-        PreparedStatement ps = connection.prepareStatement(query);
+        int delete = 0;
 
-        ps.setInt(1, id);
+        if (peliculaContainGenero == 0){
+            String query = "DELETE FROM generos WHERE id = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
 
-        //Retorna 1 si se ejecuta correctamente
-        int delete = ps.executeUpdate();
+            ps.setInt(1, id);
+            
+            //Retorna 1 si se ejecuta correctamente
+            delete = ps.executeUpdate();
+        }
         conexion.closeConnection();
-
+        //Si el genero ya tiene una o más peliculas no se puede borrar
         return delete;
     }
 

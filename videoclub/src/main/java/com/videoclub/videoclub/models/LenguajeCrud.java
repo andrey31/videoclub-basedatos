@@ -20,22 +20,28 @@ import java.util.List;
 public class LenguajeCrud {
 
     private Conexion conexion = new Conexion();
+    private PeliculaCrud peliculaCrud = new PeliculaCrud();
 
     /* Elimina un lenguaje por id */
     public Integer deleteLenguaje(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "DELETE FROM lenguajes WHERE id = ?";
+        int peliculaContainLenguaje = peliculaCrud.findCountPeliculaByIdLenguaje(id);
+        System.out.println(peliculaContainLenguaje);
 
-        PreparedStatement ps = connection.prepareStatement(query);
+        int delete = 0;
+        if(peliculaContainLenguaje == 0) {
+            String query = "DELETE FROM lenguajes WHERE id = ?";
 
-        ps.setInt(1, id);
+            PreparedStatement ps = connection.prepareStatement(query);
 
-        //Retorna 1 si se ejecuta correctamente
-        int delete = ps.executeUpdate();
+            ps.setInt(1, id);
+            //Retorna 1 si se ejecuta correctamente
+            delete = ps.executeUpdate();
+        }
         conexion.closeConnection();
-
+        //Si lenguaje tiene peliculas asignadas no se puede borrar
         return delete;
     }
 

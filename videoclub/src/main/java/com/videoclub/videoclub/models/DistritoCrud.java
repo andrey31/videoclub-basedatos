@@ -13,7 +13,7 @@ public class DistritoCrud {
 
     private Conexion conexion = new Conexion();
 
-    public Integer DeleteDistrito(int id) throws SQLException {
+    public Integer deleteDistrito(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
         String query= "DELETE FROM distritos WHERE id=?";
@@ -30,7 +30,7 @@ public Distrito findByIdDistrito(int id) throws SQLException {
         Connection connection = conexion.getConnection();
 
         String query = "SELECT dist.id, dist.distrito, cant.canton FROM distritos"
-        + " as dist INNER JOIN cantones as cant ON cant.id = dist.id WHERE id = ?";
+        + " as dist INNER JOIN cantones as cant ON cant.id = dist.fk_canton WHERE dist.id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -77,7 +77,7 @@ public Distrito findByIdDistrito(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
         String query = "SELECT dist.id, dist.distrito, cant.canton FROM distritos"
-                + " as dist INNER JOIN cantones as cant ON cant.id = dist.id WHERE id = ?";
+                + " as dist INNER JOIN cantones as cant ON cant.id = dist.fk_canton";
 
         ResultSet rs = connection.prepareStatement(query).executeQuery();
         List<Distrito> distritos = new ArrayList<>();

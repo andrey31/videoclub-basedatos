@@ -15,7 +15,7 @@ public class ProvinciaCrud {
     public Integer DeleteProvincia(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
-        String query= "DELETE FROM provincia WHERE id=?";
+        String query= "DELETE FROM provincias WHERE id=?";
         
         PreparedStatement ps= connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -28,7 +28,7 @@ public Provincia findByIdProvincia(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "SELECT * FROM provincia WHERE id = ?";
+        String query = "SELECT * FROM provincias WHERE id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -51,7 +51,7 @@ public Provincia findByIdProvincia(int id) throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "INSERT INTO provincia (provincia) VALUES (?)";
+        String query = "INSERT INTO provincias (provincia) VALUES (?)";
 
         PreparedStatement ps = connection.prepareStatement(query);
 
@@ -68,7 +68,7 @@ public Provincia findByIdProvincia(int id) throws SQLException {
     public List<Provincia> findAllProvincia() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
-        String query = "SELECT * FROM provincia";
+        String query = "SELECT * FROM provincias ORDER BY provincias.id";
         ResultSet rs = connection.prepareStatement(query).executeQuery();
         List<Provincia> Provincia = new ArrayList<>();
 
