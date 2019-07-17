@@ -6,6 +6,7 @@ import java.util.List;
 import com.videoclub.videoclub.models.AutorCrud;
 import com.videoclub.videoclub.models.entities.Autor;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/autores")
+@CrossOrigin("*")
 public class AutorController {
 
     AutorCrud autorCrud = new AutorCrud();
 
-    @GetMapping
-    public List<Autor> getAllAutor() throws SQLException {
-        return autorCrud.findAllAutor();
-    }
-
     @GetMapping("/{id}")
     public Autor getAutor(@PathVariable int id) throws SQLException { 
         return autorCrud.findByIdAutor(id);
+    }
+
+    @GetMapping
+    public List<Autor> getAllAutor() throws SQLException {
+        return autorCrud.findAllAutor();
     }
 
     @PostMapping
