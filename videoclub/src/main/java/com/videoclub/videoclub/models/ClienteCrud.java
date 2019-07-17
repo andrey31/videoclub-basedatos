@@ -2,6 +2,8 @@
 package com.videoclub.videoclub.models;
 
 import com.videoclub.videoclub.models.entities.Cliente;
+import com.videoclub.videoclub.models.entities.Direccion;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +38,9 @@ public class ClienteCrud {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "SELECT * FROM clientes WHERE id = ?";
+        String query = "SELECT c.id, c.nombre, c.apellido1, c.apellido2, c.email, "
+                + "c.telefono, d.direccion FROM clientes as c " +
+                "INNER JOIN direcciones as d ON d.id = c.fk_direccion WHERE c.id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -44,14 +48,16 @@ public class ClienteCrud {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            Cliente cliente = new Cliente(
-                    rs.getInt("id"),
-                    rs.getString("cliente"),
-                    rs.getString("apellido1"),
-                    rs.getString("apellido2"),
-                    rs.getString("correo"),
-                    rs.getString("telefono")
-            );
+            Cliente cliente = new Cliente();
+            cliente.setId(rs.getInt("id"));
+            cliente.setNombre(rs.getString("nombre"));
+            cliente.setApellido1(rs.getString("apellido1"));
+            cliente.setApellido2(rs.getString("apellido2"));
+            cliente.setCorreo(rs.getString("email"));
+            cliente.setTel(rs.getString("telefono"));
+
+            Direccion direccion = new Direccion();
+            direccion.setDireccion(rs.getString("direccion"));
             conexion.closeConnection();
             return cliente;
         }
@@ -64,11 +70,17 @@ public class ClienteCrud {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "INSERT INTO clientes (cliente) VALUES (?)";
+        String query = "INSERT INTO clientes (nombre, apellido1, apellido2, email, telefono, fk_direccion) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(query);
 
-        ps.setString(1,cliente.getCliente());
+        ps.setString(1, cliente.getNombre());
+        ps.setString(2, cliente.getApellido1());
+        ps.setString(3, cliente.getApellido2());
+        ps.setString(4, cliente.getCorreo());
+        ps.setString(5, cliente.getTel());
+        ps.setInt(6, cliente.getDireccion().getId());
 
         int insert = ps.executeUpdate();
 
@@ -82,19 +94,24 @@ public class ClienteCrud {
     public List<Cliente> findAllCliente() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
-        String query = "SELECT * FROM clientes";
+        String query = "SELECT c.id, c.nombre, c.apellido1, c.apellido2, c.email, "
+                + "c.telefono, d.direccion FROM clientes as c " +
+                "INNER JOIN direcciones as d ON d.id = c.fk_direccion";
         ResultSet rs = connection.prepareStatement(query).executeQuery();
         List<Cliente> clientes = new ArrayList<>();
 
         while (rs.next()) {
-            Cliente cliente = new Cliente(
-                    rs.getInt("id"),
-                    rs.getString("cliente"),
-                    rs.getString("apellido1"),
-                    rs.getString("apellido2"),
-                    rs.getString("correo"),
-                    rs.getString("telefono")
-            );
+            Cliente cliente = new Cliente();
+            cliente.setId(rs.getInt("id"));
+            cliente.setNombre(rs.getString("nombre"));
+            cliente.setApellido1(rs.getString("apellido1"));
+            cliente.setApellido2(rs.getString("apellido2"));
+            cliente.setCorreo(rs.getString("email"));
+            cliente.setTel(rs.getString("telefono"));
+
+            Direccion direccion = new Direccion();
+            direccion.setDireccion(rs.getString("direccion"));
+
             clientes.add(cliente);
         }
         conexion.closeConnection();

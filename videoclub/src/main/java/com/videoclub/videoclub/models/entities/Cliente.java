@@ -1,32 +1,29 @@
-
 package com.videoclub.videoclub.models.entities;
-
 
 public class Cliente {
 
    
-  private int id;
-  private String cliente;
-  private String apellido1;
-  private String apellido2;
-  private String correo;
-  private String tel;
+    private int id;
+    private String nombre;
+    private String apellido1;
+    private String apellido2;
+    private String correo;
+    private String tel;
+    private Direccion direccion;
 
     public Cliente() {
     }
 
-    public Cliente(int id, String cliente, String apellido1, String apellido2,String correo, String tel) {
+    public Cliente(int id, String nombre, String apellido1, String apellido2,String correo, String tel, Direccion direccion) {
         this.id = id;
-        this.cliente = cliente;
+        this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.correo = correo;
         this.tel = tel;
-        
-        
+        this.direccion = direccion;
     }
 
-   
     public int getId() {
         return this.id;
     }
@@ -47,16 +44,20 @@ public class Cliente {
         return tel;
     }
 
+    public Direccion getDireccion(){
+        return this.direccion;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getCliente() {
-        return this.cliente;
+    public String getNombre() {
+        return this.nombre;
     }
 
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setApellido1(String apellido1) {
@@ -75,10 +76,7 @@ public class Cliente {
         this.tel = tel;
     }
     
-    
-    
-    
-    
-    
-    
+    public void setDireccion(Direccion direccion){
+        this.direccion = direccion;
+    }
 }

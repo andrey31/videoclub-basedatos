@@ -11,31 +11,20 @@ import java.sql.Timestamp;
  *
  * @author Maricela
  */
-public class Facturas {
+public class Factura {
     
     private int id;
     private Timestamp fecha;
     private double monto;
-    private String Facturas;
 
-    public Facturas() {
+    public Factura() {
     }
 
     
-    public Facturas(int id, Timestamp fecha, double monto, String Facturas) {
+    public Factura(int id, Timestamp fecha, double monto) {
         this.id = id;
         this.fecha = fecha;
-        this.monto = monto;
-        this.Facturas= Facturas;
-                
-    }
-
-    public String getFacturas() {
-        return Facturas;
-    }
-
-    public void setFacturas(String Facturas) {
-        this.Facturas = Facturas;
+        this.monto = monto;         
     }
 
     public int getId() {

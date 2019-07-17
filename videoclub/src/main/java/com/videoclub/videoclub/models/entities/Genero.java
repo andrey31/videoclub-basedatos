@@ -10,14 +10,15 @@ package com.videoclub.videoclub.models.entities;
  * @author andre
  */
 public class Genero {
-        private int id;
+    
+    private int id;
     private String genero;
 
 
     public Genero() {
     }
 
-    public Genero(int id, String Genero) {
+    public Genero(int id, String genero) {
         this.id = id;
         this.genero = genero;
     }

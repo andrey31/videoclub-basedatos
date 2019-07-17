@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CajerosCRUD {
+public class CajeroCRUD {
 
     private Conexion conexion = new Conexion();
 
@@ -34,8 +34,10 @@ public class CajerosCRUD {
         Connection connection = conexion.getConnection();
 
             
-        String query = "SELECT d.id, d.nombre, d.apellido1, d.apellido2, d.email, d.telefono, d.usuario, d.contrasena, d.direccion  "
-                + "FROM cajero as d INNER JOIN direccion as 1 ON l.id = p.fk_direccion WHERE d.id = ?";
+        String query = "SELECT c.id, c.nombre, c.apellido1, c.apellido2, c.email, c.telefono, "
+                + "c.usuario, c.contrasena, d.direccion "
+                + "FROM cajeros as c "
+                + "INNER JOIN direcciones as d ON d.id = c.fk_direccion WHERE d.id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -45,7 +47,7 @@ public class CajerosCRUD {
         if (rs.next()) {
             Cajero cajero = new Cajero();
             cajero.setId(rs.getInt("id"));
-            cajero.setNombre(rs.getString("Nombre"));
+            cajero.setNombre(rs.getString("nombre"));
             cajero.setApellido1(rs.getString("apellido1"));
             cajero.setApellido2(rs.getString("apellido2"));
             cajero.setEmail(rs.getString("email"));
@@ -68,7 +70,9 @@ public class CajerosCRUD {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "INSERT INTO cajero (nombre, apellido1, apellido2, email, telefono, usuario, contrasena, fk_direccion) VALUES (?, ?,?,?,?,?,?,?)";
+        String query = "INSERT INTO cajero (nombre, apellido1, apellido2, email,"
+                + " telefono, usuario, contrasena, fk_direccion) "
+                + "VALUES (?, ?,?,?,?,?,?,?)";
 
         PreparedStatement ps = connection.prepareStatement(query);
 
@@ -92,15 +96,17 @@ public class CajerosCRUD {
     public List<Cajero> findAllCajero() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
-        String query = "SELECT d.id, d.nombre, d.apellido1, d.apellido2, d.email, d.telefono, d.usuario, d.contrasena, d.direccion  "
-                + "FROM cajero as d INNER JOIN direccion as 1 ON l.id = p.fk_direccion WHERE d.id = ?";
+        String query = "SELECT c.id, c.nombre, c.apellido1, c.apellido2, c.email, c.telefono, "
+                + "c.usuario, c.contrasena, d.direccion "
+                + "FROM cajeros as c "
+                + "INNER JOIN direcciones as d ON d.id = c.fk_direccion WHERE d.id = ?";
         ResultSet rs = connection.prepareStatement(query).executeQuery();
         List<Cajero> cajeros = new ArrayList<>();
 
         while (rs.next()) {
            Cajero cajero = new Cajero();
             cajero.setId(rs.getInt("id"));
-            cajero.setNombre(rs.getString("Nombre"));
+            cajero.setNombre(rs.getString("nombre"));
             cajero.setApellido1(rs.getString("apellido1"));
             cajero.setApellido2(rs.getString("apellido2"));
             cajero.setEmail(rs.getString("email"));
@@ -122,7 +128,10 @@ public class CajerosCRUD {
 
        Connection connection = conexion.getConnection();
 
-       String query = "UPDATE cajero SET nombre = ? WHERE id = ?";
+       String query = "UPDATE cajero SET nombre = ?, apellido1 = ?, "
+               + "apellido2 = ?, email = ?, telefono = ?, usuario = ?, "
+               + "contrasena = ?, fk_direccion = ? WHERE id = ?";
+               
        PreparedStatement ps = connection.prepareStatement(query);
 
        ps.setString(1, cajero.getNombre());
@@ -132,7 +141,8 @@ public class CajerosCRUD {
        ps.setString(5, cajero.getTelefono());
        ps.setString(6, cajero.getUsuario());
        ps.setString(7, cajero.getContrasena());
-       ps.setInt(8, id);
+       ps.setInt(8, cajero.getDireccion().getId());
+       ps.setInt(9, id);
        /* Retorna 1 si se ejecuta correctamente */
        int update = ps.executeUpdate();
        conexion.closeConnection();

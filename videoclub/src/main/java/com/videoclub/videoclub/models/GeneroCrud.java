@@ -107,7 +107,7 @@ public class GeneroCrud {
 
         Connection connection = conexion.getConnection();
 
-        String query = "UPDATE autores SET autor = ? WHERE id = ?";
+        String query = "UPDATE generos SET genero = ? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(query);
 
         ps.setString(1, genero.getGenero());

@@ -5,13 +5,14 @@ public class Distrito {
     
     private int id;
     private String distrito;
-    
+    private Canton canton;
+
     public Distrito(){
         
     }
-    public Distrito(int id,String distrito){
-        this.id= id;
-        this.distrito= distrito;
+    public Distrito(int id, String distrito, Canton canton){
+        this.id = id;
+        this.distrito = distrito;
     }
 
     public int getId() {
@@ -29,5 +30,12 @@ public class Distrito {
     public void setDistrito(String distrito) {
         this.distrito = distrito;
     }
-    
+
+    public Canton getCanton() {
+        return this.canton;
+    }
+
+    public void setCanton(Canton canton){
+        this.canton = canton;
+    }
 }

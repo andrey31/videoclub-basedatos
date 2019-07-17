@@ -18,7 +18,7 @@ public class DireccionCrud {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "DELETE FROM direccion WHERE id = ?";
+        String query = "DELETE FROM direcciones WHERE id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
 
@@ -35,7 +35,8 @@ public class DireccionCrud {
         Connection connection = conexion.getConnection();
 
             
-        String query = "SELECT d.id, d.direccion FROM direccion as d INNER JOIN distrito as 1 ON l.id = p.fk_distrito WHERE d.id = ?";
+        String query = "SELECT d.id, d.direccion, dis.distrito FROM direcciones as d "
+                + "INNER JOIN distritos as dis ON dis.id = d.fk_distrito WHERE d.id = ?";
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, id);
@@ -45,7 +46,7 @@ public class DireccionCrud {
         if (rs.next()) {
             Direccion direccion = new Direccion();
             direccion.setId(rs.getInt("id"));
-            direccion.setDireccion(rs.getString("Direccion"));
+            direccion.setDireccion(rs.getString("direccion"));
                     
             Distrito distrito = new Distrito();
             distrito.setDistrito(rs.getString("distrito"));
@@ -62,7 +63,7 @@ public class DireccionCrud {
         conexion.connect();
         Connection connection = conexion.getConnection();
 
-        String query = "INSERT INTO direccion (nombre, fk_distrito) VALUES (?, ?)";
+        String query = "INSERT INTO direcciones (direccion, fk_distrito) VALUES (?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(query);
 
@@ -77,7 +78,7 @@ public class DireccionCrud {
 
     }
 
-    public List<Direccion> findAllDireccion() throws SQLException {
+    /* public List<Direccion> findAllDireccion() throws SQLException {
         conexion.connect();
         Connection connection = conexion.getConnection();
         String query = "SELECT d.id, d.direccion FROM direccion as d INNER JOIN distrito as 1 ON l.id = p.fk_distrito WHERE d.id = ?";
@@ -96,18 +97,19 @@ public class DireccionCrud {
         }
         conexion.closeConnection();
         return direcciones;
-    }
+    } */
     
-    public Integer updateCajero(int id, Direccion direccion) throws SQLException {
+    public Integer updateDireccion(int id, Direccion direccion) throws SQLException {
        conexion.connect();
 
        Connection connection = conexion.getConnection();
 
-       String query = "UPDATE direccion SET direccion = ? WHERE id = ?";
+       String query = "UPDATE direcciones SET direccion = ?, fk_distrito = ? WHERE id = ?";
        PreparedStatement ps = connection.prepareStatement(query);
 
        ps.setString(1, direccion.getDireccion());
-       ps.setInt(2, id);
+       ps.setInt(2, direccion.getDistrito().getId());
+       ps.setInt(3, id);
        /* Retorna 1 si se ejecuta correctamente */
        int update = ps.executeUpdate();
        conexion.closeConnection();

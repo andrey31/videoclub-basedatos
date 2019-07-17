@@ -79,8 +79,5 @@ public class Peliculas {
     public void setGenero(Genero genero) {
         this.genero = genero;
     }
-    
-   
-}
-    
-        
+
+}     

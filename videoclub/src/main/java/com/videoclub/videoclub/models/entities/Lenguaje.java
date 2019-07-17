@@ -10,7 +10,8 @@ package com.videoclub.videoclub.models.entities;
  * @author andre
  */
 public class Lenguaje {
-      private int id;
+    
+    private int id;
     private String lenguaje;
 
 
