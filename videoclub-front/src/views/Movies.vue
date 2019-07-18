@@ -1,7 +1,7 @@
 <template>
 <b-container fluid>
   <b-row class="py-2 bg-light mx-0">
-    <b-col cols="4" class="d-flex justify-content-start">
+    <b-col cols="4" class="text-left">
       <b-button :variant="alquiler.variant" @click="setModalShow()" block>{{getTextButton}}</b-button>
     </b-col>
     <b-col cols="4" offset="4" class="text-right" v-if="!clientUndefined">
@@ -27,11 +27,21 @@
       <b-row>
         <b-col cols="4">
           <label for="">Género</label>
-          <b-form-select v-model="genre" :options="genres" class="mt-3"></b-form-select>
+          <b-form-select v-model="genre" class="mt-3">
+            <option value="">Todos</option>
+            <template v-for="genero in generos">
+              <option>{{genero.genero}}</option>
+            </template>
+          </b-form-select>
         </b-col>
         <b-col cols="4">
           <label for="">Lenguaje</label>
-          <b-form-select v-model="lang" :options="langs" class="mt-3"></b-form-select>
+          <b-form-select v-model="lang" class="mt-3">
+            <option value="">Todos</option>
+            <template v-for="l in lenguajes">
+              <option>{{l.lenguaje}}</option>
+            </template>
+          </b-form-select>
         </b-col>
         <b-col cols="4">
           <label for="">Año</label>
@@ -59,7 +69,7 @@
 
               <b-card
                 :title="i.titulo"
-                :img-src="i.img_url"
+                :img-src="i.imgUrl"
                 img-alt="Sin imagen"
                 img-top
                 style="max-width: 15rem; max-height: 60rem;"
@@ -74,7 +84,7 @@
 
                 <div slot="footer">
                   <b>Duracion: {{i.duracion}}</b> <br/>
-                  <b>Genero: {{i.genero}}</b> <br/>
+                  <b>Genero: {{i.genero.genero}}</b> <br/>
                   <b>Lenguaje: {{i.lenguaje.lenguaje}}</b>
 
                 </div>
@@ -104,20 +114,24 @@
 
   <b-modal v-model="modalShow" size="xl" title="Seleccione un cliente">
     <b-form-input v-model="filterClient" placeholder="Buscar cliente"></b-form-input>
+
     <b-table
       selectable
       select-mode="single"
-      :items="clients"
-      :fields="fieldsClients"
+      :items="clientes"
       :filter="filterClient"
+      :fields="fieldsCliente"
       @row-selected="rowSelected"
       responsive
       >
 
-      <template slot="fullname" slot-scope="row">
+      <template slot="nombreCompleto" slot-scope="row">
         {{row.item.nombre}} {{row.item.apellido1}} {{row.item.apellido2}}
       </template>
 
+      <template slot="direccion" slot-scope="row">
+        <a href="" @click.prevent="">{{row.item.direccion.direccion}}</a>
+      </template>
       <template slot="mail" slot-scope="row">
         {{row.item.email}}
       </template>
@@ -156,7 +170,15 @@ export default {
         AddMovie
     },
     computed: {
-        ...mapState(['movies', 'alquiler', 'client', 'shopping']),
+        ...mapState(['movies', 'alquiler', 'client', 'shopping', 'generos', 'lenguajes', 'clientes']),
+        years: function(){
+            let j = []
+            j.push('')
+            for (let i = 1970; i <= 2019; i++){
+                j.push(i)
+            }
+            return j
+        },
         clientUndefined: function(){
             if (typeof this.client.id === 'undefined') return true
             else return false
@@ -168,8 +190,9 @@ export default {
         },
         filterMovies: function(){
             let mf = this.movies.filter( movie => {
-                let r = movie.genero.toLowerCase().indexOf(this.genre.toString().toLowerCase()) > -1 &&
+                let r = movie.genero.genero.toLowerCase().indexOf(this.genre.toString().toLowerCase()) > -1 &&
                     movie.lenguaje.lenguaje.toLowerCase().indexOf(this.lang.toString().toLowerCase()) > -1 &&
+                    movie.anio.toLowerCase().indexOf(this.year.toString().toLowerCase()) > -1 &&
                     movie.titulo.toLowerCase().indexOf(this.title.toLowerCase()) > -1
                 return r
             })
@@ -198,6 +221,9 @@ export default {
     },
     mounted(){
         this.getAllMovie()
+        this.getAllGeneros()
+        this.getAllLenguajes()
+        this.getAllClientes()
     },
     data(){
         return {
@@ -208,63 +234,20 @@ export default {
             nbPages:0,
             title: '',
             genre: '',
-            genres: [
-                {value: '', text: 'Todos'},
-                {value: 'Guerra', text: 'Guerra'},
-                {value: 'Acción', text: 'Accion'},
-                {value: 'Drama', text: 'Drama'},
-            ],
             lang: '',
-            langs: [
-                {value: '', text: 'Todos'},
-                {value: 'Inglés', text: 'Inglés'},
-                {value: 'Francés', text: 'Frances'}
-            ],
-            year: 0,
-            years: [
-                {value: 0, text: '1980'}
-            ],
+            year: '0',
             modalShow: false,
             modalShoppingShow: false,
             select: 0,
             filterClient: '',
-            fieldsClients: [
-                {
-                    key: 'fullname',
-                    label: 'Nombre completo'
-                },
-                {
-                    key: 'mail',
-                    label: 'Correo electronico'
-                },
-                {
-                    key: 'numberPhone',
-                    label: 'Télefono'
-                },
-                {
-                    key: 'more',
-                    label: 'Más'
-                }
-            ],
-            clients: [
-                {id: '1', nombre: 'Juan', apellido1: 'P', apellido2: 'P', email: 'j@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '2', nombre: 'Juan2', apellido1: 'P2', apellido2: 'P2', email: 'j2@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '3', nombre: 'Juan', apellido1: 'P', apellido2: 'P', email: 'j@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '4', nombre: 'Juan2', apellido1: 'P2', apellido2: 'P2', email: 'j2@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '5', nombre: 'Juan', apellido1: 'P', apellido2: 'P', email: 'j@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '6', nombre: 'Juan2', apellido1: 'P2', apellido2: 'P2', email: 'j2@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '7', nombre: 'Juan', apellido1: 'P', apellido2: 'P', email: 'j@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '8', nombre: 'Juan2', apellido1: 'P2', apellido2: 'P2', email: 'j2@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '9', nombre: 'Juan', apellido1: 'P', apellido2: 'P', email: 'j@mail.com', telefono: '9999', fk_direccion: 1},
-                {id: '10', nombre: 'Juan2', apellido1: 'Azofeifanvnvnv', apellido2: 'P2', email: 'j2@mail.com', telefono: '9999',fk_direccion:  1}
+            fieldsCliente: ['nombreCompleto', 'correo', 'tel', 'direccion'],
 
-            ],
             movieModal: null
         }
     },
     methods: {
         ...mapMutations(['setAlquiler', 'setClient', 'setShopping', 'clearShopping']),
-        ...mapActions(['getAllMovie']),
+        ...mapActions(['getAllMovie', 'getAllGeneros', 'getAllLenguajes', 'getAllClientes']),
         setModalShow: function(){
             if (this.clientUndefined) this.modalShow = true
             else {
@@ -303,6 +286,7 @@ export default {
 
         },
         addShopping2: function(){
+            this.modalShoppingShow = false
             this.setShopping(this.movieModal)
         }
     }

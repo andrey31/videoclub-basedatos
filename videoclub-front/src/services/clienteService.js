@@ -1,12 +1,12 @@
 import { url } from './url.js'
 
-class ClientService {
+class ClienteService {
   constructor (axios) {
     this.axios = axios
-    this.url = `${url}/clients`
+    this.url = `${url}/clientes`
   }
-  getAllClient(){
+  getAllClientes(){
     return this.axios.get(this.url)
   }
 }
-export default ClientService
+export default ClienteService

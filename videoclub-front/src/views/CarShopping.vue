@@ -1,12 +1,16 @@
 <template>
-  <b-container class="bg-light">
+<b-container class="bg-light">
 
-    <b-table
-      :items="shopping"
-      :fields="fields"
-      responsive
-      >
-      <template slot="lenguaje" slot-scope="row">
+  <b-table
+    :items="shopping"
+    :fields="fields"
+    responsive
+    >
+    <template slot="genero" slot-scope="row">
+        {{row.item.genero.genero}}
+    </template>
+
+    <template slot="lenguaje" slot-scope="row">
         {{row.item.lenguaje.lenguaje}}
       </template>
 
